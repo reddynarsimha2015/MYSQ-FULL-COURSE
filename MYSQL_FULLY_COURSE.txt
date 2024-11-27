@@ -1,0 +1,195 @@
+use  mydb1;
+Create New Table
+==================
+create table employees(
+employee_id Int,
+first_name  varchar(50),
+last_name   varchar(50),
+hourly_pay decimal(5,2),
+hire_date Date
+);
+select * from employees;
+==========================================================================
+Rename table Name
+====================
+Rename table employees to workers;
+Rename table workers to employees
+=================================================================
+Add new column
+==============
+alter TABLE EMPLOYEES add COLUMN email VARCHAR(100);
+
+modify name
+===========
+alter TABLE EMPLOYEES modify COLUMN email VARCHAR(100)  after last_name;
+
+drop
+====
+alter table Employees drop column email;
+
+select * from employees
+==========================================================================
+Insert rows
+===========
+insert  into employees values(1,"Eugene","Krabs",25.50,"2023-01-02");
+
+Insert rows multiple rows
+-------------------------
+insert  into employees values(2,"Squidward","Tentacles",15.00,"2023-01-03"),
+(3,"spongebob","Squarepants",12.50,"2023-01-04"),
+(4,"Patrick","Star",25.50,"2023-01-05"),
+(5,"Sandy","Cheeks",17.25,"2023-01-06");
+
+insert into employees (employee_id,first_name,last_name)values(6,"Sheldon","Plankton");
+
+========================================================================================
+Select query
+===============
+select * from employees where employee_id=1;
+
+select * from employees where hourly_pay>=15;
+
+select * from employees where hire_date<='2023-01-03';
+
+select * from employees where employee_id!=1;
+
+select * from employees where hire_date is null;
+
+select * from employees where hire_date is not null; 
+
+==========================================================================
+Update & delete
+==================
+SET SQL_SAFE_UPDATES = 0;
+update mydb1.employees SET hourly_pay=10.50,
+					hire_date="2023-01-07"
+                    where employee_id=6;
+
+Delete row
+===========                    
+Delete from mydb1.employees where employee_id=6;
+                    
+select * from mydb1.employees;
+==========================================================================
+AUTOCOMMIT ,COMMIT,ROLLBACK
+===========================
+SET AUTOCOMMIT=OFF;
+COMMIT;
+DELETE FROM  mydb1.EMPLOYEES;
+rollback;
+select * from 
+---------------------------------------
+SET AUTOCOMMIT=on;
+COMMIT;
+DELETE FROM  mydb1.EMPLOYEES;
+rollback;
+select * from mydb1.employees;
+
+>>>Data cannot be rollback above query
+======================================================================
+CURRENT_DATE() &CURRENT_TIME()
+==================================
+Create  table test(
+my_date DATE,
+my_time Time,
+my_datetime datetime);
+SELECT * FROM TEST;
+
+insert INTO TEST VALUES(current_date()+1,current_time(),now());
+SELECT * FROM TEST;
+insert INTO TEST VALUES(current_date(),NULL,null);
+
+-------------------------------------------------------------------------
+UNIQUE
+=======
+Create  table products(
+product_id int,
+product_name varchar(25) unique,
+price decimal(4,2));
+
+alter table products add constraint unique(product_name);
+select * from products;
+insert into products values(100,"hamburger",3.99),
+(101,"fris",1.89),
+(102,"soda",1.00),
+(103,"ice cream",1.49),
+(104,"fris",1.75);
+
+error-1062 duplicate entry fries
+
+insert into products values(100,"hamburger",3.99),
+(101,"fris",1.89),
+(102,"soda",1.00),
+(103,"ice cream",1.49);
+
+run fine
+===================================================================================
+Not Null
+========
+use mydb1;
+Create  table products(
+product_id int,
+product_name varchar(25),
+price decimal(4,2) not null);
+
+alter table products modify price decimal(4,2) not null;
+
+select * from products;
+
+insert into products values(101,"hamburger",3.99),
+(102,"fris",null);
+
+Error-1048 column price cannot be null
+
+insert into products values(101,"hamburger",3.99),
+(102,"fris",1.89);
+==================================================================================
+IF TABLE ALREADY EXIT WWE WILL GET ERROR CODE-1050
+-------------------------------------------------------------------------------
+CHECK
+======
+create table employees(
+employee_id Int,
+first_name  varchar(50),
+last_name   varchar(50),
+hourly_pay decimal(5,2),
+hire_date Date,
+CONSTRAINT CHECK(hourly_pay >=10.00)
+);
+
+alter table employees  add constraint chk_hourly_pay check(hourly_pay >=10.00);
+
+use mydb1;
+
+insert  into employees values(2,"Squidward","Tentacles",15.00,"2023-01-03"),
+(3,"spongebob","Squarepants",2.50,"2023-01-04"),
+(4,"Patrick","Star",25.50,"2023-01-05"),
+(5,"Sandy","Cheeks",17.25,"2023-01-06");
+
+Error Code: 3819. Check constraint 'employees_chk_1' is violated.	0.015 sec
+
+
+insert  into employees values(2,"Squidward","Tentacles",15.00,"2023-01-03"),
+(3,"spongebob","Squarepants",12.50,"2023-01-04"),
+(4,"Patrick","Star",25.50,"2023-01-05"),
+(5,"Sandy","Cheeks",17.25,"2023-01-06");
+=========================================================================================================
+DEFAULT
+=======
+Create  table products(
+product_id int,
+product_name varchar(25),
+price decimal(4,2) DEFAULT 0);
+
+ALTER TABLE PRODUCTS ALTER PRICE SET DEFAULT 0;
+
+SELECT * FROM PRODUCTS;
+
+==========================================================
+
+
+
+
+
+
+
